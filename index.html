@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QNONY | قانوني</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-dark: #0b111e;
+      --card-bg: #131b2e;
+      --card-border: #1e2942;
+      --primary: #c5a880;
+      --primary-hover: #b09167;
+      --admin-color: #8b5cf6;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --danger: #ef4444;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --transition: all 0.25s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(197, 168, 128, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(30, 58, 138, 0.08) 0%, transparent 40%);
+    }
+
+    header {
+      background: rgba(19, 27, 46, 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), #846944);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: #0b111e;
+    }
+
+    .brand h1 { font-size: 1.4rem; font-weight: 800; }
+    .brand h1 span { color: var(--primary); }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .dots-btn {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .dots-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      left: 2rem;
+      top: 70px;
+      width: 210px;
+      background: #162035;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      display: none;
+      flex-direction: column;
+      z-index: 100;
+      overflow: hidden;
+    }
+
+    .dropdown-menu.active { display: flex; }
+
+    .dropdown-item {
+      padding: 0.85rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--text-main);
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: right;
+      font-size: 0.95rem;
+      transition: var(--transition);
+    }
+
+    .dropdown-item:hover { background: rgba(197, 168, 128, 0.1); color: var(--primary); }
+    .dropdown-item.logout { border-top: 1px solid var(--card-border); color: #f87171; }
+
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .auth-wrapper {
+      width: 100%;
+      max-width: 460px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 2.25rem;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .auth-nav {
+      display: flex;
+      background: #0d1424;
+      border-radius: 10px;
+      padding: 0.3rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .auth-tab.active {
+      background: var(--primary);
+      color: #0b111e;
+    }
+
+    .form-group { margin-bottom: 1.1rem; }
+    .form-group label { display: block; margin-bottom: 0.35rem; color: var(--text-muted); font-size: 0.88rem; }
+    .input-box {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: #0d1424;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      color: var(--text-main);
+      outline: none;
+    }
+    .input-box:focus { border-color: var(--primary); }
+
+    .btn-submit {
+      width: 100%;
+      padding: 0.95rem;
+      background: var(--primary);
+      color: #0b111e;
+      border: none;
+      border-radius: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+    }
+    .btn-submit:hover { background: var(--primary-hover); }
+
+    /* زر الأدمن السفلي */
+    .admin-access-btn {
+      margin-top: 1.75rem;
+      padding: 0.75rem;
+      background: transparent;
+      border: 1px dashed rgba(139, 92, 246, 0.4);
+      border-radius: 10px;
+      color: #a78bfa;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+    }
+
+    .admin-access-btn:hover {
+      background: rgba(139, 92, 246, 0.1);
+      border-color: #8b5cf6;
+      color: #c4b5fd;
+    }
+
+    /* لوحة تحكم المستخدم */
+    .dashboard-view {
+      width: 100%;
+      max-width: 900px;
+      display: none;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .top-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .stat-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .stat-card .val {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-top: 0.25rem;
+    }
+
+    .stat-card .badge-btn {
+      background: rgba(197, 168, 128, 0.15);
+      color: var(--primary);
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .hero-banner {
+      background: linear-gradient(135deg, #15223a, #0e1627);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .btn-report {
+      background: linear-gradient(135deg, var(--primary), #8b714d);
+      color: #0b111e;
+      border: none;
+      padding: 0.85rem 1.6rem;
+      border-radius: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .violations-container {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 1.75rem;
+    }
+
+    .violations-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+
+    .violation-card {
+      background: #0d1424;
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .violation-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .amount-tag {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #f87171;
+    }
+
+    .btn-pay {
+      background: #059669;
+      color: white;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .btn-pay:hover { background: #10b981; }
+
+    .status-badge {
+      padding: 0.35rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .status-unpaid { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .status-paid { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+    /* لوحة تحكم الأدمن الخاصة */
+    .admin-dashboard-view {
+      width: 100%;
+      max-width: 950px;
+      display: none;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .admin-header-bar {
+      background: linear-gradient(135deg, #2e1065, #170d2b);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 18px;
+      padding: 1.75rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-tabs-nav {
+      display: flex;
+      gap: 0.75rem;
+      background: #111827;
+      padding: 0.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+    }
+
+    .admin-tab-btn {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+    }
+
+    .admin-tab-btn.active {
+      background: #8b5cf6;
+      color: #fff;
+    }
+
+    .admin-content-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 2rem;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 8, 15, 0.85);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-content {
+      background: #131b2e;
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 480px;
+      padding: 1.75rem;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 0.75rem;
+    }
+
+    .close-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .recharge-option {
+      background: #0d1424;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .recharge-option:hover {
+      border-color: var(--primary);
+      background: #111a2f;
+    }
+
+    .recharge-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+    .school-icon { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+    .whatsapp-icon { background: rgba(37, 211, 102, 0.15); color: #25d366; }
+
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      padding: 1rem 1.4rem;
+      border-radius: 10px;
+      color: #fff;
+      font-weight: 700;
+      z-index: 2000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: var(--transition);
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast-success { background: #059669; }
+    .toast-error { background: #dc2626; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="#" class="brand">
+      <div class="brand-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+      <h1>QNONY <span>قانوني</span></h1>
+    </a>
+
+    <div class="header-actions">
+      <!-- أزرار الخروج والقائمة -->
+      <button class="btn-pay" id="adminExitBtn" style="display: none; background:#dc2626;">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i> خروج الأدمن
+      </button>
+
+      <button class="dots-btn" id="dotsBtn" style="display: none;" title="القائمة">
+        <i class="fa-solid fa-ellipsis-vertical"></i>
+      </button>
+      <div class="dropdown-menu" id="dropdownMenu">
+        <button class="dropdown-item" id="myInfoBtn">
+          <i class="fa-solid fa-id-card"></i> بياناتي
+        </button>
+        <button class="dropdown-item" id="openRechargeModalFromMenu">
+          <i class="fa-solid fa-wallet"></i> شحن الرصيد
+        </button>
+        <button class="dropdown-item logout" id="logoutBtn">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> تسجيل خروج
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- واجهة تسجيل الدخول والتسجيل العادي -->
+    <div class="auth-wrapper" id="authSection">
+      <div class="auth-nav">
+        <button class="auth-tab active" id="tabRegister">إنشاء حساب</button>
+        <button class="auth-tab" id="tabLogin">تسجيل الدخول</button>
+      </div>
+
+      <!-- تسجيل حساب -->
+      <form id="registerForm">
+        <div class="form-group">
+          <label>الاسم بالكامل</label>
+          <input type="text" id="regName" class="input-box" placeholder="مثال: كريم أحمد" required>
+        </div>
+        <div class="form-group">
+          <label>رقم الهاتف</label>
+          <input type="tel" id="regPhone" class="input-box" placeholder="مثال: 01012345678" required>
+        </div>
+        <div class="form-group">
+          <label>البريد الإلكتروني</label>
+          <input type="email" id="regEmail" class="input-box" placeholder="name@example.com" required>
+        </div>
+        <div class="form-group">
+          <label>كلمة المرور</label>
+          <input type="password" id="regPassword" class="input-box" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn-submit" id="regSubmitBtn">
+          <span>إنشاء الحساب</span> <i class="fa-solid fa-user-plus"></i>
+        </button>
+      </form>
+
+      <!-- تسجيل دخول -->
+      <form id="loginForm" style="display: none;">
+        <div class="form-group">
+          <label>البريد الإلكتروني</label>
+          <input type="email" id="loginEmail" class="input-box" placeholder="name@example.com" required>
+        </div>
+        <div class="form-group">
+          <label>كلمة المرور</label>
+          <input type="password" id="loginPassword" class="input-box" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn-submit" id="loginSubmitBtn">
+          <span>تسجيل الدخول</span> <i class="fa-solid fa-right-to-bracket"></i>
+        </button>
+      </form>
+
+      <!-- زر الدخول كأدمن في الأسفل -->
+      <button class="admin-access-btn" id="openAdminModalBtn">
+        <i class="fa-solid fa-user-shield"></i>
+        <span>تسجيل الدخول كـ أدمن (لوحة الإدارة)</span>
+      </button>
+    </div>
+
+    <!-- لوحة تحكم المستخدم العادي -->
+    <div class="dashboard-view" id="dashboardSection">
+      <div class="top-stats-grid">
+        <div class="stat-card" id="balanceCard" title="اضغط لشحن الرصيد">
+          <div>
+            <span style="font-size:0.85rem; color:var(--text-muted);"><i class="fa-solid fa-wallet"></i> رصيدي الحالي</span>
+            <div class="val" id="userBalanceText">0 ج.م</div>
+          </div>
+          <div class="badge-btn">
+            <i class="fa-solid fa-plus-circle"></i> شحن الرصيد
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div>
+            <span style="font-size:0.85rem; color:var(--text-muted);"><i class="fa-solid fa-fingerprint"></i> الرقم القومي</span>
+            <div class="val" id="topNationalId" style="letter-spacing: 2px;">--------</div>
+          </div>
+          <div class="badge-btn">
+            <i class="fa-solid fa-shield-halved"></i> موثق
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-banner">
+        <div>
+          <h2 style="font-size: 1.5rem; font-weight: 800;"><i class="fa-solid fa-gavel" style="color:var(--primary);"></i> مخلفاتي</h2>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.3rem;">عرض تفاصيل الغرامات والمحاضر ودفعها مباشرة من الرصيد.</p>
+        </div>
+        <button class="btn-report" id="openUserReportModalBtn">
+          <i class="fa-solid fa-file-circle-plus"></i> رفع محضر على شخص
+        </button>
+      </div>
+
+      <div class="violations-container">
+        <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1rem;"><i class="fa-solid fa-receipt"></i> سجل المخالفات والمحاضر الخاصة بي</h3>
+        <div class="violations-list" id="violationsList">
+          <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+            <i class="fa-solid fa-spinner fa-spin"></i> جاري جلب المخالفات...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- لوحة تحكم الأدمن (ADMIN DASHBOARD) -->
+    <div class="admin-dashboard-view" id="adminDashboardSection">
+      
+      <div class="admin-header-bar">
+        <div>
+          <h2 style="font-size:1.6rem; font-weight:800; color:#c4b5fd;">
+            <i class="fa-solid fa-shield-halved"></i> لوحة تحكم الإدارة (الأدمن)
+          </h2>
+          <p style="color:#a78bfa; font-size:0.9rem; margin-top:0.25rem;">إدارة المخالفات، شحن أرصدة المستخدمين، ومتابعة سجلات النظام.</p>
+        </div>
+      </div>
+
+      <!-- تبويبات الأدمن -->
+      <div class="admin-tabs-nav">
+        <button class="admin-tab-btn active" id="admTabViolations">
+          <i class="fa-solid fa-list-ul"></i> كل المخالفات
+        </button>
+        <button class="admin-tab-btn" id="admTabCreate">
+          <i class="fa-solid fa-file-circle-plus"></i> رفع محضر على شخص
+        </button>
+        <button class="admin-tab-btn" id="admTabBalance">
+          <i class="fa-solid fa-money-bill-transfer"></i> تزويد رصيد مستخدم
+        </button>
+      </div>
+
+      <!-- محتوى تبويب 1: استعراض كافة المخالفات المرفوعة -->
+      <div class="admin-content-box" id="admSectionAllViolations">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+          <h3 style="font-size:1.2rem; font-weight:800;"><i class="fa-solid fa-folder-tree" style="color:var(--admin-color);"></i> قائمة كافة المخالفات المرفوعة في النظام</h3>
+          <button class="btn-pay" onclick="loadAllAdminReports()" style="background:#4b5563;"><i class="fa-solid fa-arrows-rotate"></i> تحديث</button>
+        </div>
+        <div class="violations-list" id="adminAllReportsList">
+          <div style="text-align:center; padding:2rem; color:var(--text-muted);">جاري تحميل المخالفات...</div>
+        </div>
+      </div>
+
+      <!-- محتوى تبويب 2: رفع محضر كأدمن -->
+      <div class="admin-content-box" id="admSectionCreateReport" style="display: none;">
+        <h3 style="font-size:1.2rem; font-weight:800; margin-bottom:1.25rem;"><i class="fa-solid fa-gavel" style="color:var(--admin-color);"></i> تسجيل محضر / مخالفة جديدة ضد مستخدم</h3>
+        <form id="adminCreateReportForm">
+          <div class="form-group">
+            <label>الرقم القومي للشخص المخالف (8 أرقام)</label>
+            <input type="text" id="admTargetId" class="input-box" placeholder="أدخل الرقم القومي للمستخدم" maxlength="8" required>
+          </div>
+          <div class="form-group">
+            <label>عنوان المحضر</label>
+            <input type="text" id="admReportTitle" class="input-box" placeholder="مثال: غرامة إتلاف عهدة" required>
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+            <div class="form-group">
+              <label>قيمة الغرامة المستحقة (ج.م)</label>
+              <input type="number" id="admReportAmount" class="input-box" value="100" min="1" required>
+            </div>
+            <div class="form-group">
+              <label>نوع المخالفة</label>
+              <select id="admReportType" class="input-box" style="background:#0d1424; color:#fff;" required>
+                <option value="مخالفة سلوكية">مخالفة سلوكية</option>
+                <option value="إتلاف ممتلكات">إتلاف ممتلكات</option>
+                <option value="تأخير رسمي">تأخير رسمي</option>
+                <option value="عقوبة إدارية">عقوبة إدارية</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>تفاصيل الواقعة</label>
+            <textarea id="admReportDetails" class="input-box" rows="3" placeholder="تفاصيل المخالفة..." required></textarea>
+          </div>
+          <div class="form-group" style="display:flex; align-items:center; gap:0.5rem;">
+            <input type="checkbox" id="admIsPaidCheckbox" style="width:18px; height:18px;">
+            <label for="admIsPaidCheckbox" style="margin-bottom:0; cursor:pointer;">المخالفة تم دفعها بالفعل نقداً (تسجيل كـ مسددة فوراً)</label>
+          </div>
+          <button type="submit" class="btn-submit" id="admSubmitReportBtn" style="background:var(--admin-color); color:#fff;">
+            <span>تسجيل المخالفة في الشيت</span> <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </form>
+      </div>
+
+      <!-- محتوى تبويب 3: تزويد رصيد مستخدم -->
+      <div class="admin-content-box" id="admSectionAddBalance" style="display: none;">
+        <h3 style="font-size:1.2rem; font-weight:800; margin-bottom:1.25rem;"><i class="fa-solid fa-hand-holding-dollar" style="color:var(--admin-color);"></i> إضافة وتزويد رصيد لمستخدم</h3>
+        <form id="adminAddBalanceForm">
+          <div class="form-group">
+            <label>الرقم القومي للمستخدم أو اسمه بالكامل</label>
+            <input type="text" id="admUserIdentifier" class="input-box" placeholder="مثال: 83726194 أو كريم أحمد" required>
+          </div>
+          <div class="form-group">
+            <label>المبلغ المراد إضافته (ج.م)</label>
+            <input type="number" id="admBalanceToAdd" class="input-box" placeholder="مثال: 150" min="5" required>
+          </div>
+          <button type="submit" class="btn-submit" id="admSubmitBalBtn" style="background:#059669; color:#fff;">
+            <span>شحن وإضافة الرصيد فوراً</span> <i class="fa-solid fa-plus-circle"></i>
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- نافذة طلب باسورد الأدمن -->
+  <div class="modal-overlay" id="adminPasswordModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="color:#a78bfa;"><i class="fa-solid fa-shield-halved"></i> التحقق من هوية الأدمن</h3>
+        <button class="close-btn" id="closeAdminPasswordModal">&times;</button>
+      </div>
+      <form id="adminPasswordForm">
+        <div class="form-group">
+          <label>أدخل كلمة مرور الإدارة للمتابعة:</label>
+          <input type="password" id="adminSecretKeyInput" class="input-box" placeholder="كلمة المرور الخاصة بالإدارة..." required>
+        </div>
+        <button type="submit" class="btn-submit" style="background:var(--admin-color); color:#fff;">دخول لوحة الأدمن</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- نافذة رفع محضر (من المستخدم العادي) -->
+  <div class="modal-overlay" id="userReportModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-file-pen" style="color: var(--primary);"></i> رفع محضر على شخص</h3>
+        <button class="close-btn" id="closeUserReportModal">&times;</button>
+      </div>
+      <form id="userCreateReportForm">
+        <div class="form-group">
+          <label>الرقم القومي للشخص المخالف (8 أرقام)</label>
+          <input type="text" id="userTargetNatId" class="input-box" placeholder="أدخل الرقم القومي للشخص" maxlength="8" required>
+        </div>
+        <div class="form-group">
+          <label>عنوان المحضر</label>
+          <input type="text" id="userReportTitle" class="input-box" placeholder="مثال: شكوى إتلاف أو إزعاج" required>
+        </div>
+        <div class="form-group">
+          <label>قيمة الغرامة المستحقة (ج.م)</label>
+          <input type="number" id="userReportAmount" class="input-box" value="50" min="10" required>
+        </div>
+        <div class="form-group">
+          <label>نوع البلاغ</label>
+          <select id="userReportType" class="input-box" style="background:#0d1424; color:#fff;" required>
+            <option value="مخالفة سلوكية">مخالفة سلوكية</option>
+            <option value="إتلاف ممتلكات">إتلاف ممتلكات</option>
+            <option value="تأخير رسمي">تأخير رسمي</option>
+            <option value="أخرى">أخرى</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>التفاصيل</label>
+          <textarea id="userReportDetails" class="input-box" rows="3" placeholder="تفاصيل المحضر..." required></textarea>
+        </div>
+        <button type="submit" class="btn-submit" id="userSubmitReportBtn">إرسال المحضر</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- نافذة شحن الرصيد للمستخدم -->
+  <div class="modal-overlay" id="rechargeModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-wallet" style="color: var(--primary);"></i> طرق شحن الرصيد</h3>
+        <button class="close-btn" id="closeRechargeModal">&times;</button>
+      </div>
+      <p style="color: var(--text-muted); margin-bottom: 1.25rem; font-size: 0.9rem;">
+        يمكنك شحن رصيدك لتسديد المخالفات والغرامات عبر إحدى الطرق التالية:
+      </p>
+
+      <div class="recharge-option" onclick="alert('يرجى التوجه إلى إدارة المدرسة وتقديم الرقم القومي لشحن رصيدك مباشرة.');">
+        <div class="recharge-icon school-icon"><i class="fa-solid fa-school"></i></div>
+        <div>
+          <h4 style="font-weight: 700;">الدفع عن طريق المدرسة</h4>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">سدد نقداً في مقر إدارة المدرسة مع إبراز رقمك القومي للأدمن.</p>
+        </div>
+      </div>
+
+      <a class="recharge-option" id="whatsappPayLink" href="#" target="_blank">
+        <div class="recharge-icon whatsapp-icon"><i class="fa-brands fa-whatsapp"></i></div>
+        <div>
+          <h4 style="font-weight: 700;">الدفع عن طريق الواتساب</h4>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">تواصل مباشرة عبر الواتساب لتأكيد الشحن فوراً.</p>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- نافذة بياناتي -->
+  <div class="modal-overlay" id="infoModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-address-card" style="color: var(--primary);"></i> بياناتي</h3>
+        <button class="close-btn" id="closeInfoModal">&times;</button>
+      </div>
+      <div style="background:#0d1424; padding:0.85rem; border-radius:10px; margin-bottom:0.6rem;">
+        <span style="font-size:0.8rem; color:var(--text-muted);">الاسم</span>
+        <div id="modalUserName" style="font-weight:700;">-</div>
+      </div>
+      <div style="background:#0d1424; padding:0.85rem; border-radius:10px; margin-bottom:0.6rem;">
+        <span style="font-size:0.8rem; color:var(--text-muted);">رقم الهاتف</span>
+        <div id="modalUserPhone" style="color:var(--primary); font-weight:700;">-</div>
+      </div>
+      <div style="background:#0d1424; padding:0.85rem; border-radius:10px; margin-bottom:0.6rem;">
+        <span style="font-size:0.8rem; color:var(--text-muted);">البريد الإلكتروني</span>
+        <div id="modalUserEmail" style="color:var(--text-muted);">-</div>
+      </div>
+      <div style="background:#0d1424; padding:0.85rem; border-radius:10px;">
+        <span style="font-size:0.8rem; color:var(--text-muted);">الرقم القومي (8 أرقام غير مكررة)</span>
+        <div id="modalUserNationalId" style="font-size:1.3rem; font-weight:800; color:var(--primary); letter-spacing:2px;">--------</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toastBox">
+    <span id="toastMsg">تم بنجاح</span>
+  </div>
+
+  <script>
+    // -------------------------------------------------------------
+    // ضع هنا رابط Web App الخاص بـ Google Apps Script
+    // -------------------------------------------------------------
+    const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbxAwsSIQn6xkkIiCAbHZFxzcjzRSQcFbojYv915q1y64hCSDLk7v7NRHRBbTbhJ0w/exec";
+
+    // باسورد الأدمن المطلوب بدقة
+    const ADMIN_SECRET = "38456823754353469568968";
+    const WHATSAPP_PHONE = "201068487932";
+
+    let currentUser = JSON.parse(localStorage.getItem('qnony_user')) || null;
+    let isAdminActive = sessionStorage.getItem('qnony_is_admin') === "true";
+
+    // العناصر
+    const authSection = document.getElementById('authSection');
+    const dashboardSection = document.getElementById('dashboardSection');
+    const adminDashboardSection = document.getElementById('adminDashboardSection');
+    const dotsBtn = document.getElementById('dotsBtn');
+    const adminExitBtn = document.getElementById('adminExitBtn');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+
+    // توليد 8 أرقام مختلفة تماماً
+    function generateUnique8DigitId() {
+      const digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+      for (let i = digits.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [digits[i], digits[j]] = [digits[j], digits[i]];
+      }
+      if (digits[0] === '0') {
+        const temp = digits[0];
+        digits[0] = digits[8];
+        digits[8] = temp;
+      }
+      return digits.slice(0, 8).join('');
+    }
+
+    function showToast(msg, type = "success") {
+      const toast = document.getElementById('toastBox');
+      document.getElementById('toastMsg').innerText = msg;
+      toast.className = `toast toast-${type} show`;
+      setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    // تبديل أزرار الدخول والتسجيل
+    document.getElementById('tabRegister').onclick = () => {
+      document.getElementById('tabRegister').classList.add('active');
+      document.getElementById('tabLogin').classList.remove('active');
+      document.getElementById('registerForm').style.display = 'block';
+      document.getElementById('loginForm').style.display = 'none';
+    };
+
+    document.getElementById('tabLogin').onclick = () => {
+      document.getElementById('tabLogin').classList.add('active');
+      document.getElementById('tabRegister').classList.remove('active');
+      document.getElementById('loginForm').style.display = 'block';
+      document.getElementById('registerForm').style.display = 'none';
+    };
+
+    // قائمة الـ 3 نقط
+    dotsBtn.onclick = (e) => {
+      e.stopPropagation();
+      dropdownMenu.classList.toggle('active');
+    };
+    document.addEventListener('click', () => dropdownMenu.classList.remove('active'));
+
+    // التحقق من حالة العرض
+    function renderApp() {
+      if (isAdminActive) {
+        authSection.style.display = 'none';
+        dashboardSection.style.display = 'none';
+        adminDashboardSection.style.display = 'flex';
+        adminExitBtn.style.display = 'inline-flex';
+        dotsBtn.style.display = 'none';
+        loadAllAdminReports();
+      } else if (currentUser) {
+        authSection.style.display = 'none';
+        dashboardSection.style.display = 'flex';
+        adminDashboardSection.style.display = 'none';
+        adminExitBtn.style.display = 'none';
+        dotsBtn.style.display = 'flex';
+        document.getElementById('topNationalId').innerText = currentUser.nationalId;
+        document.getElementById('userBalanceText').innerText = `${currentUser.balance || 0} ج.م`;
+        loadUserViolations();
+      } else {
+        authSection.style.display = 'flex';
+        dashboardSection.style.display = 'none';
+        adminDashboardSection.style.display = 'none';
+        adminExitBtn.style.display = 'none';
+        dotsBtn.style.display = 'none';
+      }
+    }
+
+    // --- منطق الأدمن ---
+    document.getElementById('openAdminModalBtn').onclick = () => {
+      document.getElementById('adminPasswordModal').classList.add('active');
+    };
+    document.getElementById('closeAdminPasswordModal').onclick = () => {
+      document.getElementById('adminPasswordModal').classList.remove('active');
+    };
+
+    document.getElementById('adminPasswordForm').onsubmit = (e) => {
+      e.preventDefault();
+      const enteredPass = document.getElementById('adminSecretKeyInput').value.trim();
+      if (enteredPass === ADMIN_SECRET) {
+        isAdminActive = true;
+        sessionStorage.setItem('qnony_is_admin', "true");
+        document.getElementById('adminPasswordModal').classList.remove('active');
+        document.getElementById('adminSecretKeyInput').value = '';
+        showToast("مرحباً بك في لوحة تحكم الأدمن!");
+        renderApp();
+      } else {
+        showToast("كلمة المرور غير صحيحة!", "error");
+      }
+    };
+
+    adminExitBtn.onclick = () => {
+      isAdminActive = false;
+      sessionStorage.removeItem('qnony_is_admin');
+      showToast("تم الخروج من وضع الإدارة");
+      renderApp();
+    };
+
+    // تبويبات الأدمن
+    const admTabViolations = document.getElementById('admTabViolations');
+    const admTabCreate = document.getElementById('admTabCreate');
+    const admTabBalance = document.getElementById('admTabBalance');
+
+    const admSectionAllViolations = document.getElementById('admSectionAllViolations');
+    const admSectionCreateReport = document.getElementById('admSectionCreateReport');
+    const admSectionAddBalance = document.getElementById('admSectionAddBalance');
+
+    admTabViolations.onclick = () => {
+      admTabViolations.classList.add('active');
+      admTabCreate.classList.remove('active');
+      admTabBalance.classList.remove('active');
+      admSectionAllViolations.style.display = 'block';
+      admSectionCreateReport.style.display = 'none';
+      admSectionAddBalance.style.display = 'none';
+      loadAllAdminReports();
+    };
+
+    admTabCreate.onclick = () => {
+      admTabCreate.classList.add('active');
+      admTabViolations.classList.remove('active');
+      admTabBalance.classList.remove('active');
+      admSectionCreateReport.style.display = 'block';
+      admSectionAllViolations.style.display = 'none';
+      admSectionAddBalance.style.display = 'none';
+    };
+
+    admTabBalance.onclick = () => {
+      admTabBalance.classList.add('active');
+      admTabViolations.classList.remove('active');
+      admTabCreate.classList.remove('active');
+      admSectionAddBalance.style.display = 'block';
+      admSectionAllViolations.style.display = 'none';
+      admSectionCreateReport.style.display = 'none';
+    };
+
+    // [أدمن] رفع محضر على شخص
+    document.getElementById('adminCreateReportForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const submitBtn = document.getElementById('admSubmitReportBtn');
+      submitBtn.disabled = true;
+
+      const payload = {
+        action: "createReport",
+        targetNationalId: document.getElementById('admTargetId').value.trim(),
+        title: document.getElementById('admReportTitle').value.trim(),
+        amount: document.getElementById('admReportAmount').value,
+        type: document.getElementById('admReportType').value,
+        details: document.getElementById('admReportDetails').value.trim(),
+        isPaid: document.getElementById('admIsPaidCheckbox').checked
+      };
+
+      try {
+        const res = await fetch(SHEET_API_URL, { method: "POST", body: JSON.stringify(payload) });
+        const result = await res.json();
+        if (result.status === "success") {
+          showToast(result.message);
+          document.getElementById('adminCreateReportForm').reset();
+          admTabViolations.click();
+        } else {
+          showToast(result.message, "error");
+        }
+      } catch (err) {
+        showToast("خطأ في الاتصال بالخادم!", "error");
+      } finally {
+        submitBtn.disabled = false;
+      }
+    };
+
+    // [أدمن] تزويد رصيد مستخدم
+    document.getElementById('adminAddBalanceForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const submitBtn = document.getElementById('admSubmitBalBtn');
+      submitBtn.disabled = true;
+
+      const payload = {
+        action: "adminAddBalance",
+        identifier: document.getElementById('admUserIdentifier').value.trim(),
+        amount: document.getElementById('admBalanceToAdd').value
+      };
+
+      try {
+        const res = await fetch(SHEET_API_URL, { method: "POST", body: JSON.stringify(payload) });
+        const result = await res.json();
+        if (result.status === "success") {
+          showToast(result.message);
+          document.getElementById('adminAddBalanceForm').reset();
+        } else {
+          showToast(result.message, "error");
+        }
+      } catch (err) {
+        showToast("خطأ أثناء تزويد الرصيد!", "error");
+      } finally {
+        submitBtn.disabled = false;
+      }
+    };
+
+    // [أدمن] جلب كل المخالفات
+    async function loadAllAdminReports() {
+      const container = document.getElementById('adminAllReportsList');
+      container.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> جاري جلب كافة المخالفات المسجلة...</div>`;
+
+      try {
+        const res = await fetch(SHEET_API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "adminGetAllReports" })
+        });
+        const result = await res.json();
+
+        if (result.status === "success" && result.reports.length > 0) {
+          container.innerHTML = "";
+          result.reports.reverse().forEach(rep => {
+            const isPaid = rep.status === "تم السداد";
+            const card = document.createElement('div');
+            card.className = "violation-card";
+            card.innerHTML = `
+              <div>
+                <h4 style="font-size:1.05rem;">${rep.title} <span style="font-size:0.8rem; color:#a78bfa;">(${rep.id})</span></h4>
+                <p style="font-size:0.85rem; color:var(--text-muted); margin:0.2rem 0;">
+                  <i class="fa-solid fa-user-tag"></i> مسجل على الرقم القومي: <b style="color:var(--primary);">${rep.targetNatId}</b> | <i class="fa-regular fa-calendar"></i> ${rep.date}
+                </p>
+                <p style="font-size:0.9rem; color:#cbd5e1;">${rep.details}</p>
+              </div>
+              <div class="violation-meta">
+                <span class="amount-tag">${rep.amount} ج.م</span>
+                <span class="status-badge ${isPaid ? 'status-paid' : 'status-unpaid'}">${rep.status}</span>
+              </div>
+            `;
+            container.appendChild(card);
+          });
+        } else {
+          container.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--text-muted);">لا توجد أي مخالفات مسجلة في الشيت حتى الآن.</div>`;
+        }
+      } catch (err) {
+        container.innerHTML = `<div style="text-align:center; padding:1.5rem; color:#f87171;">فشل جلب البيانات من الشيت.</div>`;
+      }
+    }
+
+    // --- منطق المستخدم العادي ---
+    document.getElementById('registerForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const submitBtn = document.getElementById('regSubmitBtn');
+      submitBtn.disabled = true;
+
+      const fullName = document.getElementById('regName').value.trim();
+      const phone = document.getElementById('regPhone').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPassword').value;
+      const nationalId = generateUnique8DigitId();
+
+      const payload = { action: "register", fullName, phone, email, password, nationalId };
+
+      try {
+        if (!SHEET_API_URL.includes("ضع_رابط")) {
+          const res = await fetch(SHEET_API_URL, { method: "POST", body: JSON.stringify(payload) });
+          const result = await res.json();
+          if (result.status !== "success") {
+            showToast(result.message, "error");
+            submitBtn.disabled = false;
+            return;
+          }
+        }
+        currentUser = { fullName, phone, email, nationalId, balance: 0 };
+        localStorage.setItem('qnony_user', JSON.stringify(currentUser));
+        showToast("تم إنشاء الحساب والرقم القومي: " + nationalId);
+        renderApp();
+      } catch (err) {
+        showToast("فشل الاتصال بالشيت!", "error");
+      } finally {
+        submitBtn.disabled = false;
+      }
+    };
+
+    document.getElementById('loginForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const submitBtn = document.getElementById('loginSubmitBtn');
+      submitBtn.disabled = true;
+
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      try {
+        const res = await fetch(SHEET_API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "login", email, password })
+        });
+        const result = await res.json();
+
+        if (result.status === "success") {
+          currentUser = result.user;
+          localStorage.setItem('qnony_user', JSON.stringify(currentUser));
+          showToast("مرحباً بك " + currentUser.fullName);
+          renderApp();
+        } else {
+          showToast(result.message, "error");
+        }
+      } catch (err) {
+        showToast("خطأ في الاتصال بالخادم!", "error");
+      } finally {
+        submitBtn.disabled = false;
+      }
+    };
+
+    // رفع محضر من المستخدم
+    document.getElementById('openUserReportModalBtn').onclick = () => document.getElementById('userReportModal').classList.add('active');
+    document.getElementById('closeUserReportModal').onclick = () => document.getElementById('userReportModal').classList.remove('active');
+
+    document.getElementById('userCreateReportForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const submitBtn = document.getElementById('userSubmitReportBtn');
+      submitBtn.disabled = true;
+
+      const payload = {
+        action: "createReport",
+        targetNationalId: document.getElementById('userTargetNatId').value.trim(),
+        title: document.getElementById('userReportTitle').value.trim(),
+        amount: document.getElementById('userReportAmount').value,
+        type: document.getElementById('userReportType').value,
+        details: document.getElementById('userReportDetails').value.trim(),
+        isPaid: false
+      };
+
+      try {
+        const res = await fetch(SHEET_API_URL, { method: "POST", body: JSON.stringify(payload) });
+        const result = await res.json();
+        if (result.status === "success") {
+          showToast("تم رفع المحضر بنجاح!");
+          document.getElementById('userReportModal').classList.remove('active');
+          document.getElementById('userCreateReportForm').reset();
+        } else {
+          showToast(result.message, "error");
+        }
+      } catch (e) {
+        showToast("خطأ أثناء رفع المحضر", "error");
+      } finally {
+        submitBtn.disabled = false;
+      }
+    };
+
+    // جلب مخالفات ورصيد المستخدم
+    async function loadUserViolations() {
+      const container = document.getElementById('violationsList');
+      if (SHEET_API_URL.includes("ضع_رابط")) return;
+
+      try {
+        const res = await fetch(SHEET_API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "getUserData", nationalId: currentUser.nationalId })
+        });
+        const result = await res.json();
+
+        if (result.status === "success") {
+          currentUser.balance = result.balance;
+          localStorage.setItem('qnony_user', JSON.stringify(currentUser));
+          document.getElementById('userBalanceText').innerText = `${result.balance} ج.م`;
+
+          if (result.reports && result.reports.length > 0) {
+            container.innerHTML = "";
+            result.reports.reverse().forEach(rep => {
+              const isPaid = rep.status === "تم السداد";
+              const card = document.createElement('div');
+              card.className = "violation-card";
+              card.innerHTML = `
+                <div>
+                  <h4 style="font-size:1.05rem;">${rep.title} <span style="font-size:0.8rem; color:var(--primary);">(${rep.id})</span></h4>
+                  <p style="font-size:0.85rem; color:var(--text-muted); margin:0.2rem 0;">
+                    <i class="fa-solid fa-tag"></i> ${rep.type} | <i class="fa-regular fa-calendar"></i> ${rep.date}
+                  </p>
+                  <p style="font-size:0.9rem; color:#cbd5e1;">${rep.details}</p>
+                </div>
+                <div class="violation-meta">
+                  <span class="amount-tag">${rep.amount} ج.م</span>
+                  <span class="status-badge ${isPaid ? 'status-paid' : 'status-unpaid'}">${rep.status}</span>
+                  ${!isPaid ? `<button class="btn-pay" onclick="payViolation('${rep.id}', ${rep.amount})"><i class="fa-solid fa-credit-card"></i> دفع الغرامة</button>` : ''}
+                </div>
+              `;
+              container.appendChild(card);
+            });
+          } else {
+            container.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--text-muted);"><i class="fa-solid fa-shield-cat" style="font-size:2.5rem; margin-bottom:0.5rem; display:block;"></i> لا توجد مخالفات مسجلة بحقك حالياً.</div>`;
+          }
+        }
+      } catch (err) {
+        container.innerHTML = `<div style="text-align:center; padding:1.5rem; color:#f87171;">تعذر تحديث البيانات.</div>`;
+      }
+    }
+
+    // دفع المخالفة
+    window.payViolation = async function(reportId, amount) {
+      if (currentUser.balance < amount) {
+        showToast("رصيدك الحالي غير كافٍ! يرجى شحن الرصيد أولاً.", "error");
+        openRecharge();
+        return;
+      }
+
+      if (!confirm(`هل أنت متأكد من دفع ${amount} ج.م لسداد هذه الغرامة؟`)) return;
+
+      try {
+        const res = await fetch(SHEET_API_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "payViolation",
+            nationalId: currentUser.nationalId,
+            reportId: reportId,
+            amount: amount
+          })
+        });
+        const result = await res.json();
+
+        if (result.status === "success") {
+          showToast(result.message);
+          currentUser.balance = result.newBalance;
+          localStorage.setItem('qnony_user', JSON.stringify(currentUser));
+          loadUserViolations();
+        } else {
+          showToast(result.message, "error");
+        }
+      } catch (e) {
+        showToast("فشلت عملية الدفع!", "error");
+      }
+    };
+
+    function openRecharge() {
+      if (!currentUser) return;
+      const msg = encodeURIComponent(`مرحباً، أريد شحن رصيدي في تطبيق قانوني.\nالاسم: ${currentUser.fullName}\nالرقم القومي: ${currentUser.nationalId}`);
+      document.getElementById('whatsappPayLink').href = `https://wa.me/${WHATSAPP_PHONE}?text=${msg}`;
+      document.getElementById('rechargeModal').classList.add('active');
+      dropdownMenu.classList.remove('active');
+    }
+
+    document.getElementById('balanceCard').onclick = openRecharge;
+    document.getElementById('openRechargeModalFromMenu').onclick = openRecharge;
+    document.getElementById('closeRechargeModal').onclick = () => document.getElementById('rechargeModal').classList.remove('active');
+
+    document.getElementById('myInfoBtn').onclick = () => {
+      if (currentUser) {
+        document.getElementById('modalUserName').innerText = currentUser.fullName;
+        document.getElementById('modalUserPhone').innerText = currentUser.phone || 'غير مسجل';
+        document.getElementById('modalUserEmail').innerText = currentUser.email;
+        document.getElementById('modalUserNationalId').innerText = currentUser.nationalId;
+        document.getElementById('infoModal').classList.add('active');
+      }
+    };
+    document.getElementById('closeInfoModal').onclick = () => document.getElementById('infoModal').classList.remove('active');
+
+    document.getElementById('logoutBtn').onclick = () => {
+      localStorage.removeItem('qnony_user');
+      currentUser = null;
+      renderApp();
+      showToast("تم تسجيل الخروج");
+    };
+
+    renderApp();
+  </script>
+</body>
+</html>
